@@ -9,9 +9,9 @@ export default function handleUserCreate(req : Request, res : Response) {
     // user의 request를 통해 받은 email을 통해 실제 유저가 있는지 검색하여 나온 값
     const user = searchUser(email);
 
-    // 만약 email이 db에 조회되지 않는 다면 401 에러를 리턴
+    // 만약 email이 db에 조회된다면 401 에러를 리턴
     if(user) {
-        return res.status(401).send("등록된 사용자가 존재하지 않습니다.");
+        return res.status(401).send("이미 등록된 사용자 입니다.");
     }
 
     // 만약 email이 db에 조회가 된다면 users db에 데이터 추가
