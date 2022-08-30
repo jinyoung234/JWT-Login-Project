@@ -35,8 +35,7 @@ export default function handleUserLogin(req : Request, res : Response) {
     }, "5m")
 
     const refreshToken = signJWT({
-        sessionId : session.sessionId,
-        email : user.email
+        sessionId : session.sessionId
     }, "1d");
 
     res.cookie("refreshToken", refreshToken, {
