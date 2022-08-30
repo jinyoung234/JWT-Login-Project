@@ -8,8 +8,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { client } from '../../utils/api/api';
 
 const theme = createTheme();
 
@@ -19,14 +19,14 @@ export default function RegisterComponent () {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        axios.post("http://localhost:4000/api/register", {
+        client.post("/api/register", {
             email: data.get('email'),
             password: data.get('password'),
         })
             .then((res) => {
                 goLogin("/")
             })
-            .catch((err : AxiosError) => {
+            .catch((err : any) => {
                 if(data.get('email') === '') {
                     alert("이메일을 다시 입력해주세요.");
                 } else if(data.get('password') === '') {
