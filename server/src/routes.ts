@@ -2,6 +2,7 @@ import { Express } from "express";
 import handleAuthUser from "./controller/handleAuthUserController";
 import handleUserCreate from "./controller/handleUserController";
 import handleUserLogin from "./controller/handleUserLoginController";
+import handleValidRefreshToken from "./controller/handleValidRefreshTokenController";
 
 export default function routes(app : Express) {
 
@@ -13,4 +14,7 @@ export default function routes(app : Express) {
 
     // 유저 확인 api
     app.get("/api/user", handleAuthUser);
+
+    // 유저 refresh
+    app.get("/api/refresh", handleValidRefreshToken)
 }
