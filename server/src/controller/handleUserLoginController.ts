@@ -32,11 +32,12 @@ export default function handleUserLogin(req : Request, res : Response) {
     // access token과 refresh token의 만료 주기는 각각 5분, 1년으로 설정
     const accessToken = signJWT({
         email : user.email, sessionId : session.sessionId
-    }, "5s")
+    }, "5m")
 
     const refreshToken = signJWT({
-        sessionId : session.sessionId
-    }, "1y");
+        sessionId : session.sessionId,
+        email : user.email
+    }, "1d");
 
     res.cookie("refreshToken", refreshToken, {
         maxAge : 3.154e10, // 1년
