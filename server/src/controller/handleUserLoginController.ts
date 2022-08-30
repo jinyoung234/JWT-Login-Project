@@ -1,10 +1,10 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { searchUser } from "../db/user";
 import { createSession } from "../db/userSession";
 import { signJWT } from "../utils/jwt";
 
 // function for handle user login
-export default function handleUserLogin(req : Request, res : Response, next : NextFunction) {
+export default function handleUserLogin(req : Request, res : Response) {
     
     // user가 입력한 email, password를 변수로 저장
     const {email, password} = req.body;
@@ -14,9 +14,15 @@ export default function handleUserLogin(req : Request, res : Response, next : Ne
 
     // 만약 db에 password와 id 정보가 없다면 401 리턴
     if(!user) {
-        return res.status(401).send("등록된 아이디가 존재하지 않습니다.");
+        return res.status(401).send({
+            "status" : 401,
+            "message" : "아이디를 다시 입력해주세요.",
+        });
     } else if (user.password !== password) {
-        return res.status(401).send("비밀번호가 유효하지 않습니다.");
+        return res.status(401).send({
+            "status" : 401,
+            "message" : "비밀번호를 다시 입력해주세요.",
+        });
     }
 
     // 입력한 email을 통해 session 생성
@@ -32,17 +38,15 @@ export default function handleUserLogin(req : Request, res : Response, next : Ne
         sessionId : session.sessionId
     }, "1y");
 
-    // 쿠키에 accessToken과 refreshToken을 담음
-    res.cookie("accessToken", accessToken, {
-        maxAge : 300000, // 5분
-        httpOnly : true,
-    });
-
     res.cookie("refreshToken", refreshToken, {
         maxAge : 3.154e10, // 1년
         httpOnly : true,
     });
 
     // 유저에게 session 반환
-    return res.status(200).send(session);
+    return res.status(200).send({
+        "status" : 200,
+        "message" : "로그인 성공",
+        "accessToken" : accessToken
+    });
 }
