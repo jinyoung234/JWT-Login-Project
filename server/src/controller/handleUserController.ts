@@ -11,7 +11,10 @@ export default function handleUserCreate(req : Request, res : Response) {
 
     // 만약 email이 db에 조회된다면 401 에러를 리턴
     if(user) {
-        return res.status(401).send("이미 등록된 사용자 입니다.");
+        return res.status(401).send({
+            "status" : 401,
+            "message" : "이미 등록된 사용자 입니다."
+        });
     }
 
     // 만약 email이 db에 조회가 된다면 users db에 데이터 추가
@@ -23,5 +26,8 @@ export default function handleUserCreate(req : Request, res : Response) {
 
     // 응답으로 200 코드와 함께 회원가입 처리를 완료 시킴
     console.log(users);
-    return res.status(200).send("회원가입 처리가 완료되었습니다.");
+    return res.status(200).send({
+        "status" : 200,
+        "message" : "회원가입이 완료되었습니다."
+    });
 }
