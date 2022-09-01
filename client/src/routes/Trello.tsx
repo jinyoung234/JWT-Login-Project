@@ -35,9 +35,17 @@ export default function Trello() {
         refetchInterval : 1000*60*4,
         refetchOnWindowFocus : false,
     })
+    const handleUserLogout = () => {
+        client.get("/api/logout")
+        .then(res => {
+            window.location.replace('/');
+        })
+    }
     return(
         <>
         <div>{userInfo}</div>
+        <button
+            onClick={handleUserLogout}>logout</button>
         </>
     )
 }
