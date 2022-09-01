@@ -12,6 +12,10 @@ export function getSession(sessionId : string) {
     return userSession[sessionKey];
 }
 
+export function deleteSession(sessionId : string) {
+    delete userSession[sessionId];
+}
+
 // 유저의 세션 생성
 export function createSession(email : string) {
     
