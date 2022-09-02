@@ -1,51 +1,38 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react"
+import { useRecoilValueLoadable } from "recoil";
 import { client, refreshApi } from "../utils/api/api";
-
-interface IResponse {
-    status: string;
-    message : string;
-    email : string;
-}
-
-interface IToken {
-    status: string;
-    message : string;
-    accessToken : string;
-}
+import { refreshSelector } from "../utils/store";
 
 export default function Trello() {
-    const [userInfo, setUserInfo] = useState('');
-    useEffect(() => {
-            client.get("/api/refresh")
-            .then(res => {
-                const data = res.data as IToken;
-                client.defaults.headers.common["Authorization"] = `Bearer ${data.accessToken}`
-                client.get("/api/user")
-                .then(res => {
-                    let data = res.data as IResponse
-                    setUserInfo(data.email);
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-            })
-    },[])
-    useQuery(["refresh"], refreshApi, {
-        refetchInterval : 1000*60*4,
-        refetchOnWindowFocus : false,
-    })
     const handleUserLogout = () => {
         client.get("/api/logout")
         .then(res => {
             window.location.replace('/');
         })
     }
-    return(
-        <>
-        <div>{userInfo}</div>
-        <button
-            onClick={handleUserLogout}>logout</button>
-        </>
-    )
+
+    const refreshLoadable = useRecoilValueLoadable(refreshSelector);
+    
+    useQuery(["refresh"], refreshApi, {
+        refetchInterval : 1000*60*4,
+        refetchOnWindowFocus : false,
+    });
+
+    switch(refreshLoadable.state) {
+        case 'hasValue' :
+            return (
+                <>
+                    <div>{refreshLoadable.contents}</div>
+                    <button
+                        onClick={handleUserLogout}
+                    >
+                    logout
+                    </button>
+                </>
+            );
+        case 'loading' : 
+            return <div>is Loading...</div>
+        case 'hasError' : 
+            throw refreshLoadable.contents  
+    }
 }
