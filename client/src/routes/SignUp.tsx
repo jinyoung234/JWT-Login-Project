@@ -1,8 +1,5 @@
-import RegisterComponent from "../components/register/RegisterComponent";
+import RegisterComponent from '../components/register/RegisterComponent';
 
 export default function SignUp() {
-  
-  return (
-    <RegisterComponent/>
-  );
+  return <RegisterComponent />;
 }

@@ -10,10 +10,10 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme = {theme}>
-        <GlobalStyle/>
-        <Router/>
-        <ReactQueryDevtools initialIsOpen panelProps={{style:{height:250}}}/>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Router />
+        <ReactQueryDevtools initialIsOpen panelProps={{ style: { height: 250 } }} />
       </ThemeProvider>
     </QueryClientProvider>
   );
